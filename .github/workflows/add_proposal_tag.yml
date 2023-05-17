@@ -1,0 +1,20 @@
+name: Add Proposal Tag
+
+on:
+  pull_request:
+    types: [opened, edited]
+
+jobs:
+  add_proposal_tag:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Add Proposal Tag
+        if: contains(github.event.pull_request.title, 'proposal')
+        uses: actions/labeler@v2
+        with:
+          repository-token: ${{ secrets.GITHUB_TOKEN }}
+          label: proposal
