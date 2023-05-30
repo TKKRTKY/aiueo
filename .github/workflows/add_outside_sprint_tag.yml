@@ -17,7 +17,7 @@ jobs:
         run: echo "contains_string=$(echo ${{ github.event.pull_request.title }} | egrep -i -c '${{ env.TARGET }}')"  >> $GITHUB_OUTPUT
 
       - name: Add label to PR
-        if: (steps.check_title.outputs.contains_string == '1') && (!contains(github.event.pull_request.labels.*.name, '${{ env.LABEL }}'))
+        if: steps.check_title.outputs.contains_string == '1' && contains(github.event.pull_request.labels.*.name, '${{ env.LABEL }}') == false
         uses: actions/github-script@v6
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
@@ -35,7 +35,7 @@ jobs:
             console.log('Label added to PR:', response);
 
       - name: Remove label from PR
-        if: (steps.check_title.outputs.contains_string == '0') && (contains(github.event.pull_request.labels.*.name, '${{ env.LABEL }}'))
+        if: steps.check_title.outputs.contains_string == '0' && contains(github.event.pull_request.labels.*.name, '${{ env.LABEL }}') == true
         uses: actions/github-script@v6
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
