@@ -32,3 +32,21 @@ jobs:
             });
             
             console.log('Label added to PR:', response);
+
+      - name: Remove label from PR
+        if: steps.check_title.outputs.contains_string == '0'
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const { owner, repo } = context.repo;
+            const issue_number = context.issue.number;
+            
+            const response = await github.rest.issues.removeLabels({
+              owner,
+              repo,
+              issue_number,
+              labels: ["${{ env.LABEL }}"]
+            });
+            
+            console.log('Label removed from PR:', response);
