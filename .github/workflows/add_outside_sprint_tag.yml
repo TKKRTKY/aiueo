@@ -20,7 +20,7 @@ jobs:
         run: |
           echo "hogehoge"
           echo ${{ github.event.pull_request.*.labels }}
-          echo "contains_label=$(echo ${{ github.event.pull_request.*.labels }} | egrep -i -c '${{ env.LABEL }}')"  >> $GITHUB_OUTPUT
+          echo "contains_label=$(echo ${{ github.event.pull_request.labels.*.name }} | egrep -i -c '${{ env.LABEL }}')"  >> $GITHUB_OUTPUT
 
       - name: Add label to PR
         if: steps.check_title.outputs.contains_string == '1'
