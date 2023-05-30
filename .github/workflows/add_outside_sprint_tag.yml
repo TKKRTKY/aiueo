@@ -33,7 +33,7 @@ jobs:
               owner,
               repo,
               issue_number,
-              labels: [${{ steps.set_variables.outputs.label }}
+              labels: [${{ steps.set_variables.outputs.label }}]
             });
             
             console.log('Label added to PR:', response);
