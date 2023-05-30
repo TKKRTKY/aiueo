@@ -18,7 +18,7 @@ jobs:
           echo "label=$LABEL" >> $GITHUB_OUTPUT
       - name: Check PR title
         id: check_title
-        run: echo "contains_string=$(echo ${{ github.event.pull_request.title }} | egrep -i -c -e ${{ steps.set_variables.outputs.target }})"  >> $GITHUB_OUTPUT
+        run: echo "contains_string=$(echo ${{ github.event.pull_request.title }} | egrep -i -c -e $TARGET)"  >> $GITHUB_OUTPUT
 
       - name: Add label to PR
         if: steps.check_title.outputs.contains_string == '1'
