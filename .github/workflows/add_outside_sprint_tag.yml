@@ -19,7 +19,7 @@ jobs:
       - name: Add label to PR
         if: |
           steps.check_title.outputs.contains_string == '1' &&
-          !contains(github.event.pull_request.labels.*.name, '${{ env.LABEL }}')
+          !contains(github.event.pull_request.labels.*.name, 'hanicaスプリント外')
         uses: actions/github-script@v6
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
@@ -39,7 +39,7 @@ jobs:
       - name: Remove label from PR
         if: |
           steps.check_title.outputs.contains_string == '0' &&
-          contains(github.event.pull_request.labels.*.name, '${{ env.LABEL }}')
+          contains(github.event.pull_request.labels.*.name, 'hanicaスプリント外')
         uses: actions/github-script@v6
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
