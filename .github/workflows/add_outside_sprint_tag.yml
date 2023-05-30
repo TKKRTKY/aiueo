@@ -8,8 +8,8 @@ jobs:
   label:
     runs-on: ubuntu-latest
     env:
-      TARGET: 'proposal|progre'
-      LABEL: 'hanicaスプリント外'
+      TARGET: "proposal|progre"
+      LABEL: "hanicaスプリント外"
     steps:
       - name: Set Variables
         id: set_variables
