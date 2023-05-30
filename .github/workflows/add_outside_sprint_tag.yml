@@ -1,4 +1,4 @@
-name: Add Proposal Tag
+name: Add Outside Sprint Tag
 
 on:
   pull_request:
@@ -7,10 +7,13 @@ on:
 jobs:
   label:
     runs-on: ubuntu-latest
+    env:
+      TARGET: 'proposal|progre'
+      LABEL: 'hanicaスプリント外'
     steps:
       - name: Check PR title
         id: check_title
-        run: echo "::set-output name=contains_string::$(echo ${{ github.event.pull_request.title }} | grep -c 'proposal')"
+        run: echo "contains_string=$(echo ${{ github.event.pull_request.title }} | egrep -i -c -e $TARGET)"  >> $GITHUB_OUTPUT
 
       - name: Add label to PR
         if: steps.check_title.outputs.contains_string == '1'
@@ -20,13 +23,12 @@ jobs:
           script: |
             const { owner, repo } = context.repo;
             const issue_number = context.issue.number;
-            const label = 'proposal';
             
             const response = await github.rest.issues.addLabels({
               owner,
               repo,
               issue_number,
-              labels: [label]
+              labels: [$LABEL]
             });
             
             console.log('Label added to PR:', response);
