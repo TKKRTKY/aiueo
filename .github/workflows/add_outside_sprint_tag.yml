@@ -11,19 +11,13 @@ jobs:
       TARGET: 'proposal|progre'
       LABEL: 'hanicaスプリント外'
     steps:
+      # 本当はcontainsで処理できるといいんだけど、複数条件を指定できないので、grepで処理している
       - name: Check PR title
         id: check_title
         run: echo "contains_string=$(echo ${{ github.event.pull_request.title }} | egrep -i -c '${{ env.TARGET }}')"  >> $GITHUB_OUTPUT
 
-      - name: Check Label
-        id: check_label
-        run: |
-          echo "hogehoge"
-          echo ${{ github.event.pull_request.*.labels }}
-          echo "contains_label=$(echo ${{ github.event.pull_request.labels.*.name }}[*] | egrep -i -c '${{ env.LABEL }}')"  >> $GITHUB_OUTPUT
-
       - name: Add label to PR
-        if: steps.check_title.outputs.contains_string == '1'
+        if: steps.check_title.outputs.contains_string == '1' && !contains(github.event.pull_request.labels.*.name, '${{ env.LABEL }}')
         uses: actions/github-script@v6
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
@@ -41,7 +35,7 @@ jobs:
             console.log('Label added to PR:', response);
 
       - name: Remove label from PR
-        if: steps.check_title.outputs.contains_string == '0' && steps.check_label.outputs.contains_label == '1'
+        if: steps.check_title.outputs.contains_string == '0' && contains(github.event.pull_request.labels.*.name, '${{ env.LABEL }}')
         uses: actions/github-script@v6
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
