@@ -42,7 +42,7 @@ jobs:
             const { owner, repo } = context.repo;
             const issue_number = context.issue.number;
             
-            const response = await github.rest.issues.removeLabels({
+            const response = await github.rest.issues.removeLabel({
               owner,
               repo,
               issue_number,
