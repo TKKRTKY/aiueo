@@ -8,12 +8,12 @@ jobs:
   label:
     runs-on: ubuntu-latest
     env:
-      TARGET: "proposal|progre"
-      LABEL: "hanicaスプリント外"
+      TARGET: 'proposal|progre'
+      LABEL: 'hanicaスプリント外'
     steps:
       - name: Check PR title
         id: check_title
-        run: echo "contains_string=$(echo ${{ github.event.pull_request.title }} | egrep -i -c ${{ env.TARGET }})"  >> $GITHUB_OUTPUT
+        run: echo "contains_string=$(echo ${{ github.event.pull_request.title }} | egrep -i -c '${{ env.TARGET }}')"  >> $GITHUB_OUTPUT
 
       - name: Add label to PR
         if: steps.check_title.outputs.contains_string == '1'
