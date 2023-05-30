@@ -14,7 +14,7 @@ jobs:
 
       - name: Add label to PR
         if: steps.check_title.outputs.contains_string == '1'
-        uses: actions/github-script@v5
+        uses: actions/github-script@v6
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
@@ -22,7 +22,7 @@ jobs:
             const issue_number = context.issue.number;
             const label = 'proposal';
             
-            const response = await github.issues.addLabels({
+            const response = await github.rest.issues.addLabels({
               owner,
               repo,
               issue_number,
