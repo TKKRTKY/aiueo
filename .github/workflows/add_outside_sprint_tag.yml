@@ -11,14 +11,9 @@ jobs:
       TARGET: "proposal|progre"
       LABEL: "hanicaスプリント外"
     steps:
-      - name: Set Variables
-        id: set_variables
-        run: |
-          echo "target=$TARGET" >> $GITHUB_OUTPUT
-          echo "label=$LABEL" >> $GITHUB_OUTPUT
       - name: Check PR title
         id: check_title
-        run: echo "contains_string=$(echo ${{ github.event.pull_request.title }} | egrep -i -c -e $TARGET)"  >> $GITHUB_OUTPUT
+        run: echo "contains_string=$(echo ${{ github.event.pull_request.title }} | egrep -i -c ${{ env.TARGET }})"  >> $GITHUB_OUTPUT
 
       - name: Add label to PR
         if: steps.check_title.outputs.contains_string == '1'
@@ -33,7 +28,7 @@ jobs:
               owner,
               repo,
               issue_number,
-              labels: [${{ steps.set_variables.outputs.label }}]
+              labels: ["${{ env.LABEL }}"]
             });
             
             console.log('Label added to PR:', response);
