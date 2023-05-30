@@ -5,17 +5,28 @@ on:
     types: [opened, edited]
 
 jobs:
-  add_proposal_tag:
+  label:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
+      - name: Check PR title
+        id: check_title
+        run: echo "::set-output name=contains_string::$(echo ${{ github.event.pull_request.title }} | grep -c 'proposal')"
 
-      - name: Add Proposal Tag
-        if: contains(github.event.pull_request.title, 'proposal')
-        uses: actions/labeler@v2
+      - name: Add label to PR
+        if: steps.check_title.outputs.contains_string == '1'
+        uses: actions/github-script@v5
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          repository-token: ${{ secrets.GITHUB_TOKEN }}
-          label: proposal
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const { owner, repo } = context.repo;
+            const issue_number = context.issue.number;
+            const label = 'proposal';
+            
+            const response = await github.issues.addLabels({
+              owner,
+              repo,
+              issue_number,
+              labels: [label]
+            });
+            
+            console.log('Label added to PR:', response);
